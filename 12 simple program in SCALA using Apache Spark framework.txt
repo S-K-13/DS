@@ -1,0 +1,315 @@
+use this code to implement using colab else use second code to implement on terminal 
+
+# -------------------------------------------------
+# Assignment 13: Apache Spark (Word Count using PySpark)
+# -------------------------------------------------
+
+# Step 1: Install PySpark
+!pip install pyspark
+
+# Step 2: Import SparkSession
+from pyspark.sql import SparkSession
+
+# Step 3: Create Spark Session
+spark = SparkSession.builder.appName("WordCount").getOrCreate()
+
+# Step 4: Sample Data (can also use file)
+data = ["Hello Spark Hello Hadoop", 
+        "Spark is fast", 
+        "Hadoop and Spark"]
+
+# Convert data to RDD
+rdd = spark.sparkContext.parallelize(data)
+
+# Step 5: Apply Word Count Logic
+
+# Split words
+words = rdd.flatMap(lambda line: line.split(" "))
+
+# Map each word to (word, 1)
+word_pairs = words.map(lambda word: (word, 1))
+
+# Reduce to get count
+word_counts = word_pairs.reduceByKey(lambda a, b: a + b)
+
+# Step 6: Display Output
+print("Word Count Result:")
+for word, count in word_counts.collect():
+    print(word, count)
+
+//////////////////////////////////////////////////
+
+
+# EXPERIMENT 13 – APACHE SPARK (WORD COUNT USING PYSPARK)
+
+## AIM
+To perform a simple data processing task using Apache Spark by implementing a Word Count program.
+
+## CODE EXPLANATION
+
+### 1. INSTALLING PYSPARK
+!pip install pyspark  
+Installs PySpark library in Colab environment.  
+Why: Spark is not pre-installed in Colab.
+
+### 2. IMPORTING SPARK SESSION
+from pyspark.sql import SparkSession  
+SparkSession → entry point to Spark functionality.  
+Why: Required to initialize Spark.
+
+### 3. CREATING SPARK SESSION
+spark = SparkSession.builder.appName("WordCount").getOrCreate()  
+builder → configures Spark  
+appName() → sets application name  
+getOrCreate() → creates new session or uses existing  
+Why: Starts Spark engine.
+
+### 4. INPUT DATA
+data = ["Hello Spark Hello Hadoop","Spark is fast","Hadoop and Spark"]  
+List of strings used as sample dataset.  
+Why: Input for processing.
+
+### 5. CREATING RDD
+rdd = spark.sparkContext.parallelize(data)  
+parallelize() → converts data into RDD (Resilient Distributed Dataset).  
+Why: Spark processes data using RDDs.
+
+### 6. SPLITTING WORDS (flatMap)
+words = rdd.flatMap(lambda line: line.split(" "))  
+flatMap() → splits each line into words  
+Why: Converts sentences into individual words.
+
+### 7. MAPPING WORDS
+word_pairs = words.map(lambda word: (word, 1))  
+map() → creates key-value pairs (word,1)  
+Why: Prepares data for counting.
+
+### 8. REDUCING (COUNTING)
+word_counts = word_pairs.reduceByKey(lambda a, b: a + b)  
+reduceByKey() → groups same words and adds counts  
+Why: Calculates frequency of each word.
+
+### 9. DISPLAY OUTPUT
+for word, count in word_counts.collect(): print(word, count)  
+collect() → brings results to driver  
+Why: Displays final result.
+
+## WORKING FLOW
+Input data → convert to RDD → split words → map (word,1) → reduceByKey → display output
+
+## KEY CONCEPTS
+RDD → distributed data structure  
+flatMap → transformation (split data)  
+map → transformation (key-value pair)  
+reduceByKey → aggregation  
+collect → action (retrieve result)
+
+## OUTPUT
+Example:
+Hello 2  
+Spark 3  
+Hadoop 2  
+is 1  
+fast 1  
+and 1  
+
+## IS THIS CODE ENOUGH FOR PRACTICAL EXAM?
+
+YES ✅ (Fully sufficient)
+
+Reasons:
+- Uses Spark framework ✔  
+- Demonstrates transformations and actions ✔  
+- Simple and easy to explain ✔  
+- Covers core concept (Word Count) ✔  
+- Matches lab expectation ✔  
+
+## WHEN YOU MAY LOSE MARKS
+- Not explaining flatMap, map, reduceByKey  
+- Not mentioning RDD concept  
+- Not showing output  
+
+## VIVA READY ANSWER
+“Apache Spark processes data using RDDs. In Word Count, flatMap splits data, map creates key-value pairs, and reduceByKey counts frequency.”
+
+## CONCLUSION
+The Word Count program demonstrates how Spark processes data using distributed computing. It applies transformations and actions to efficiently compute word frequency.
+
+
+///////////////////////////////////////////////////
+
+
+22222222222222222222222222222222222222222222222222222 code
+
+# EXPERIMENT 13 – RUNNING PYSPARK CODE ON UBUNTU TERMINAL
+
+## AIM
+To execute a simple Apache Spark (Word Count) program using PySpark on Ubuntu.
+
+## PREREQUISITES
+- Ubuntu system  
+- Internet connection  
+- Python3 installed  
+
+## STEP 1: INSTALL JAVA
+```bash
+sudo apt update
+sudo apt install openjdk-11-jdk -y
+```
+
+Check:
+```bash
+java -version
+```
+
+## STEP 2: INSTALL PYSPARK
+```bash
+pip3 install pyspark
+```
+
+## STEP 3: CREATE PYTHON FILE
+```bash
+nano wordcount.py
+```
+
+## STEP 4: PASTE THE CODE
+```python
+# -------------------------------------------------
+# Assignment 13: Apache Spark Word Count (PySpark)
+# -------------------------------------------------
+
+from pyspark.sql import SparkSession
+
+# Create Spark Session
+spark = SparkSession.builder.appName("WordCount").getOrCreate()
+
+# Sample Data
+data = ["Hello Spark Hello Hadoop",
+        "Spark is fast",
+        "Hadoop and Spark"]
+
+# Convert to RDD
+rdd = spark.sparkContext.parallelize(data)
+
+# Word Count Logic
+words = rdd.flatMap(lambda line: line.split(" "))
+word_pairs = words.map(lambda word: (word, 1))
+word_counts = word_pairs.reduceByKey(lambda a, b: a + b)
+
+# Display Output
+print("Word Count Result:")
+for word, count in word_counts.collect():
+    print(word, count)
+
+# Stop Spark Session
+spark.stop()
+```
+
+Save:
+- Ctrl + X  
+- Y  
+- Enter  
+
+## STEP 5: RUN THE PROGRAM
+```bash
+python3 wordcount.py
+```
+
+## STEP 6: VIEW OUTPUT
+Example:
+Hello 2  
+Spark 3  
+Hadoop 2  
+is 1  
+fast 1  
+and 1  
+
+## OPTIONAL: RUN IN PYSPARK MODE
+```bash
+pyspark
+```
+
+## WORKING SUMMARY
+Install Java → install PySpark → create file → run code → process data → display output  
+
+## CONCLUSION
+The PySpark program demonstrates distributed data processing using Spark. It performs a Word Count operation using transformations and actions on RDD.
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+# EXPERIMENT 13 – APACHE SPARK WORD COUNT (PYSPARK ON UBUNTU)
+
+## AIM
+To implement a simple Word Count program using Apache Spark (PySpark) on Ubuntu.
+
+## CODE EXPLANATION
+
+### 1. IMPORTING SPARK SESSION
+from pyspark.sql import SparkSession  
+SparkSession → entry point of Spark  
+Why used: To initialize Spark environment.
+
+### 2. CREATING SPARK SESSION
+spark = SparkSession.builder.appName("WordCount").getOrCreate()  
+builder → configures Spark  
+appName() → sets application name  
+getOrCreate() → creates Spark session  
+Why used: Starts Spark engine.
+
+### 3. INPUT DATA
+data = ["Hello Spark Hello Hadoop","Spark is fast","Hadoop and Spark"]  
+List of strings used as input dataset  
+Why used: Provides data for processing.
+
+### 4. CREATING RDD
+rdd = spark.sparkContext.parallelize(data)  
+parallelize() → converts list into RDD (Resilient Distributed Dataset)  
+Why used: Spark processes data using RDD.
+
+### 5. SPLITTING WORDS (flatMap)
+words = rdd.flatMap(lambda line: line.split(" "))  
+flatMap() → splits sentences into words  
+Why used: Converts text into individual words.
+
+### 6. MAPPING WORDS
+word_pairs = words.map(lambda word: (word, 1))  
+map() → creates key-value pairs (word,1)  
+Why used: Prepares data for counting.
+
+### 7. REDUCING (COUNTING)
+word_counts = word_pairs.reduceByKey(lambda a, b: a + b)  
+reduceByKey() → groups same words and adds counts  
+Why used: Calculates frequency of each word.
+
+### 8. DISPLAY OUTPUT
+for word, count in word_counts.collect(): print(word, count)  
+collect() → retrieves result from distributed system  
+Why used: Displays output.
+
+### 9. STOPPING SPARK SESSION
+spark.stop()  
+stop() → terminates Spark session  
+Why used: Frees system resources.
+
+## WORKING FLOW
+Input data → convert to RDD → split words → map (word,1) → reduceByKey → display result
+
+## KEY CONCEPTS
+RDD → distributed dataset  
+flatMap → transformation (split data)  
+map → transformation (create pairs)  
+reduceByKey → aggregation  
+collect → action (retrieve result)
+
+## OUTPUT
+Example:
+Hello 2  
+Spark 3  
+Hadoop 2  
+is 1  
+fast 1  
+and 1  
+
+## CONCLUSION
+The program demonstrates how Apache Spark processes data using distributed computing. It performs Word Count using transformations and actions on RDD.
