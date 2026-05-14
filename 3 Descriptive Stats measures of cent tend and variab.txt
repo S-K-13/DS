@@ -1,0 +1,259 @@
+# -------------------------------------------------
+# Assignment 3: Descriptive Statistics
+# -------------------------------------------------
+
+# Step 1: Import libraries
+import pandas as pd
+import numpy as np
+
+# -------------------------------------------------
+# Step 2: Load Dataset
+# -------------------------------------------------
+
+# Method 1: Local CSV (USED)
+df = pd.read_csv("Iris.csv")
+
+# Method 2: URL (ALTERNATIVE)
+# url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+# col_names = ['SepalLength','SepalWidth','PetalLength','PetalWidth','Species']
+# df = pd.read_csv(url, names=col_names)
+
+print("\nColumn names:")
+print(df.columns)
+
+print("First 5 rows:")
+print(df.head())
+
+# -------------------------------------------------
+# PART 1: Summary Statistics Grouped by Categorical Variable
+# -------------------------------------------------
+
+# Grouping by Species
+grouped = df.groupby('Species')
+
+print("\nMean values grouped by Species:")
+print(grouped.mean())
+
+print("\nMedian values grouped by Species:")
+print(grouped.median())
+
+print("\nMinimum values grouped by Species:")
+print(grouped.min())
+
+print("\nMaximum values grouped by Species:")
+print(grouped.max())
+
+print("\nStandard Deviation grouped by Species:")
+print(grouped.std())
+
+# Create list of numeric values for each category
+sepal_list = grouped['SepalLengthCm'].apply(list)
+
+print("\nList of SepalLength for each Species:")
+print(sepal_list)
+
+# -------------------------------------------------
+# PART 2: Statistical Details for Each Species
+# -------------------------------------------------
+
+# Filter dataset by species
+setosa = df[df['Species'] == 'Iris-setosa']
+versicolor = df[df['Species'] == 'Iris-versicolor']
+virginica = df[df['Species'] == 'Iris-virginica']
+
+print("\nStatistics for Iris-setosa:")
+print(setosa.describe())
+
+print("\nStatistics for Iris-versicolor:")
+print(versicolor.describe())
+
+print("\nStatistics for Iris-virginica:")
+print(virginica.describe())
+
+/////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 3 – DESCRIPTIVE STATISTICS
+
+## AIM
+To perform descriptive statistical analysis on a dataset by calculating measures such as mean, median, minimum, maximum, and standard deviation, grouping data based on a categorical variable, and analyzing each category separately.
+
+## CODE EXPLANATION (LINE BY LINE)
+
+1. IMPORTING LIBRARIES
+```python
+import pandas as pd
+import numpy as np
+```
+import → used to include external libraries into the program  
+pandas → used for data manipulation and analysis using DataFrame  
+as pd → alias for pandas for easier usage  
+numpy → used for numerical operations (not heavily used here but commonly included)  
+as np → short alias  
+Why used: Required for handling dataset and performing statistical operations.
+
+2. LOADING DATASET
+```python
+df = pd.read_csv("Iris.csv")
+```
+pd.read_csv() → reads CSV file and converts it into DataFrame  
+"Iris.csv" → dataset file name  
+df → variable storing dataset  
+Why used: To load dataset into memory for analysis.
+
+Alternative Method:
+```python
+# url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+# col_names = ['SepalLength','SepalWidth','PetalLength','PetalWidth','Species']
+# df = pd.read_csv(url, names=col_names)
+```
+Why used: To load dataset directly from internet if local file is not available.
+
+3. CHECKING COLUMN NAMES
+```python
+print("\nColumn names:")
+print(df.columns)
+```
+columns → returns all column names in dataset  
+Why used: To verify column names before performing operations, avoiding errors due to mismatched names.
+
+4. DISPLAYING DATA
+```python
+print("First 5 rows:")
+print(df.head())
+```
+head() → displays first 5 rows of dataset  
+print() → outputs data  
+Why used: To understand structure and preview dataset.
+
+-------------------------------------------------
+PART 1: SUMMARY STATISTICS GROUPED BY CATEGORICAL VARIABLE
+-------------------------------------------------
+
+5. GROUPING DATA
+```python
+grouped = df.groupby('Species')
+```
+groupby() → groups dataset based on categorical column (Species)  
+Why used: To perform statistical operations separately for each category (setosa, versicolor, virginica).
+
+6. MEAN CALCULATION
+```python
+print(grouped.mean())
+```
+mean() → calculates average of numerical columns for each group  
+Why used: To understand central tendency for each species.
+
+7. MEDIAN CALCULATION
+```python
+print(grouped.median())
+```
+median() → returns middle value of sorted data  
+Why used: Useful when data has outliers, gives robust central value.
+
+8. MINIMUM VALUES
+```python
+print(grouped.min())
+```
+min() → returns smallest value in each group  
+Why used: To identify lowest observations.
+
+9. MAXIMUM VALUES
+```python
+print(grouped.max())
+```
+max() → returns highest value in each group  
+Why used: To identify peak observations.
+
+10. STANDARD DEVIATION
+```python
+print(grouped.std())
+```
+std() → measures spread of data from mean  
+Why used: To understand variability in each species.
+
+11. LIST CREATION FOR EACH CATEGORY
+```python
+sepal_list = grouped['SepalLengthCm'].apply(list)
+```
+apply() → applies function to each group  
+list → converts values into list  
+Why used: Creates a list of numeric values (Sepal Length) for each species, which is explicitly required in the assignment.
+
+-------------------------------------------------
+PART 2: STATISTICAL DETAILS FOR EACH SPECIES
+-------------------------------------------------
+
+12. FILTERING DATA BY SPECIES
+```python
+setosa = df[df['Species'] == 'Iris-setosa']
+versicolor = df[df['Species'] == 'Iris-versicolor']
+virginica = df[df['Species'] == 'Iris-virginica']
+```
+df[condition] → filters rows based on condition  
+Why used: To separate dataset into individual species for detailed analysis.
+
+13. STATISTICAL DETAILS USING DESCRIBE
+```python
+print(setosa.describe())
+print(versicolor.describe())
+print(virginica.describe())
+```
+describe() → provides summary statistics including:
+count → number of values  
+mean → average  
+std → standard deviation  
+min → minimum  
+25%, 50%, 75% → percentiles  
+max → maximum  
+Why used: Gives complete statistical overview of each species separately as required.
+
+## FUNCTIONS USED AND PURPOSE
+read_csv() → load dataset  
+head() → display initial rows  
+columns → show column names  
+groupby() → group data based on category  
+mean() → calculate average  
+median() → find middle value  
+min() → smallest value  
+max() → largest value  
+std() → measure spread  
+apply() → apply function to grouped data  
+list → convert values to list  
+describe() → detailed statistical summary  
+
+## CONCLUSION
+In this assignment, descriptive statistical analysis is performed on the Iris dataset. The dataset is grouped based on the categorical variable “Species”, and statistical measures such as mean, median, minimum, maximum, and standard deviation are calculated for each group. A list of numeric values is also generated for each category. Further, each species is analyzed separately using the describe() function to obtain detailed statistics including percentiles. This helps in understanding the distribution and variation of data across different categories.

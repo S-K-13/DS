@@ -1,0 +1,329 @@
+use this code to implement using colab / jupyter notebook else use 2nd code to implement it on ubuntu terminal 
+
+# -------------------------------------------------
+# Assignment 11 (Simulated using SQLite)
+# -------------------------------------------------
+
+import sqlite3
+
+# Step 1: Create Database
+conn = sqlite3.connect("my_database.db")
+
+# Step 2: Create Cursor
+cursor = conn.cursor()
+
+# Step 3: Create Table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS my_table (
+    id INTEGER,
+    name TEXT,
+    age INTEGER
+)
+""")
+
+# Step 4: Insert Data
+cursor.execute("INSERT INTO my_table VALUES (1, 'John', 25)")
+cursor.execute("INSERT INTO my_table VALUES (2, 'Jane', 30)")
+cursor.execute("INSERT INTO my_table VALUES (3, 'Bob', 40)")
+
+conn.commit()
+
+# Step 5: Run Queries
+print("All Data:")
+for row in cursor.execute("SELECT * FROM my_table"):
+    print(row)
+
+print("\nAge > 25:")
+for row in cursor.execute("SELECT * FROM my_table WHERE age > 25"):
+    print(row)
+
+print("\nAverage Age:")
+for row in cursor.execute("SELECT AVG(age) FROM my_table"):
+    print(row)
+
+# Close connection
+conn.close()
+
+//////////////////////////////////////////////////
+
+# EXPERIMENT 11 – DATABASE OPERATIONS USING SQLITE (IMPALA SIMULATION)
+
+## AIM
+To create a database, create a table, insert data, and perform simple SQL queries using SQLite (simulation of Impala).
+
+## CODE EXPLANATION
+
+### 1. IMPORTING LIBRARY
+```python
+import sqlite3
+```
+sqlite3 → Python library for SQL database operations  
+Why used: To create and manage database using SQL.
+
+### 2. CREATING DATABASE CONNECTION
+```python
+conn = sqlite3.connect("my_database.db")
+```
+connect() → creates/opens database file  
+Why used: Establish connection with database.
+
+### 3. CREATING CURSOR
+```python
+cursor = conn.cursor()
+```
+cursor() → allows execution of SQL commands  
+Why used: Interface between Python and database.
+
+### 4. CREATING TABLE
+```python
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS my_table (
+    id INTEGER,
+    name TEXT,
+    age INTEGER
+)
+""")
+```
+CREATE TABLE → creates table  
+IF NOT EXISTS → avoids duplicate error  
+Why used: Define structure of table.
+
+### 5. INSERTING DATA
+```python
+cursor.execute("INSERT INTO my_table VALUES (1, 'John', 25)")
+cursor.execute("INSERT INTO my_table VALUES (2, 'Jane', 30)")
+cursor.execute("INSERT INTO my_table VALUES (3, 'Bob', 40)")
+```
+INSERT INTO → adds records  
+Why used: Store data in table.
+
+### 6. SAVING CHANGES
+```python
+conn.commit()
+```
+commit() → saves data permanently  
+Why used: Ensures changes are stored.
+
+### 7. DISPLAYING ALL DATA
+```python
+for row in cursor.execute("SELECT * FROM my_table"):
+    print(row)
+```
+SELECT * → retrieves all records  
+Why used: View complete table.
+
+### 8. APPLYING CONDITION
+```python
+for row in cursor.execute("SELECT * FROM my_table WHERE age > 25"):
+    print(row)
+```
+WHERE → filters data  
+Why used: Retrieve specific rows.
+
+### 9. AGGREGATE FUNCTION
+```python
+for row in cursor.execute("SELECT AVG(age) FROM my_table"):
+    print(row)
+```
+AVG() → calculates average  
+Why used: Perform analysis.
+
+### 10. CLOSING CONNECTION
+```python
+conn.close()
+```
+close() → closes database  
+Why used: Free resources and prevent errors.
+
+## FUNCTIONS USED
+connect() → open/create database  
+cursor() → execute queries  
+execute() → run SQL commands  
+commit() → save changes  
+close() → close connection  
+
+## SQL COMMANDS USED
+CREATE TABLE → create table  
+INSERT INTO → insert data  
+SELECT → retrieve data  
+WHERE → filter data  
+AVG() → calculate average  
+
+## WORKING FLOW
+Create database → create table → insert data → commit → retrieve data → apply condition → calculate average → close connection  
+
+## CONCLUSION
+SQLite is used to simulate Impala operations. It helps understand how databases are created, data is inserted, and queries are executed for analysis.
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+# EXPERIMENT 11 – IMPALA SQL EXECUTION ON UBUNTU
+
+## AIM
+To create a database, table, insert data, and execute simple queries using Impala.
+
+## PREREQUISITES
+- Ubuntu system  
+- Internet connection  
+- Basic terminal knowledge  
+
+## STEP 1: INSTALL DOCKER
+```bash
+sudo apt update
+sudo apt install docker.io -y
+```
+
+## STEP 2: START DOCKER
+```bash
+sudo systemctl start docker
+```
+
+## STEP 3: DOWNLOAD CLOUDERA IMAGE
+```bash
+sudo docker pull cloudera/quickstart:latest
+```
+
+## STEP 4: RUN CONTAINER
+```bash
+sudo docker run -it --hostname=quickstart.cloudera \
+--privileged=true \
+-p 8888:8888 -p 7180:7180 \
+cloudera/quickstart:latest /usr/bin/docker-quickstart
+```
+
+Alternative (single-line version):
+```bash
+sudo docker run -it --hostname=quickstart.cloudera --privileged=true -p 8888:8888 -p 7180:7180 cloudera/quickstart:latest /usr/bin/docker-quickstart
+```
+
+## STEP 5: ACCESS CONTAINER
+```bash
+sudo docker ps
+sudo docker exec -it <container_id> /bin/bash
+```
+
+## STEP 6: START IMPALA SHELL
+```bash
+impala-shell
+```
+Prompt:
+[localhost:21000] >
+
+## STEP 7: CREATE DATABASE
+```sql
+CREATE DATABASE my_database;
+```
+
+## STEP 8: USE DATABASE
+```sql
+USE my_database;
+```
+
+## STEP 9: CREATE TABLE
+```sql
+CREATE TABLE my_table (
+id INT,
+name STRING,
+age INT
+);
+```
+
+## STEP 10: INSERT DATA
+```sql
+INSERT INTO my_table VALUES
+(1, 'John', 25),
+(2, 'Jane', 30),
+(3, 'Bob', 40);
+```
+
+## STEP 11: DISPLAY DATA
+```sql
+SELECT * FROM my_table;
+```
+
+## STEP 12: RUN QUERIES
+```sql
+SELECT name, age FROM my_table;
+SELECT * FROM my_table WHERE age > 25;
+SELECT COUNT(*) FROM my_table;
+SELECT AVG(age) FROM my_table;
+SELECT * FROM my_table ORDER BY age;
+```
+
+## STEP 13: EXIT
+```bash
+quit;
+```
+
+## WORKING SUMMARY
+Install Docker → run Cloudera → start Impala → create DB → create table → insert data → run queries
+
+## CONCLUSION
+Impala is used to perform SQL operations on Hadoop data. This experiment demonstrates database creation, data insertion, and query execution.
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+# EXPERIMENT 11 – WORKING OF IMPALA EXECUTION
+
+## OVERALL WORKING
+The process involves setting up Docker, running a Cloudera container, starting Impala, and executing SQL queries to manage and analyze data.
+
+## STEP-WISE WORKING
+
+### 1. DOCKER INSTALLATION
+Docker is installed to create a containerized environment.  
+Why: Impala requires a Hadoop ecosystem which cannot run directly on Ubuntu.
+
+### 2. RUNNING CLOUDERA CONTAINER
+A Cloudera Quickstart container is launched.  
+Working: It contains Hadoop and Impala and acts as a mini cluster.
+
+### 3. ACCESSING THE CONTAINER
+Using docker exec, we enter the container.  
+Working: Provides access to the system where Impala is installed.
+
+### 4. STARTING IMPALA SHELL
+Command: impala-shell  
+Working: Opens SQL interface to execute queries.
+
+### 5. CREATING DATABASE
+Command: CREATE DATABASE my_database;  
+Working: Creates a logical space to store tables.
+
+### 6. USING DATABASE
+Command: USE my_database;  
+Working: Selects database for operations.
+
+### 7. CREATING TABLE
+Command: CREATE TABLE my_table (id INT, name STRING, age INT);  
+Working: Defines structure of data.
+
+### 8. INSERTING DATA
+Command: INSERT INTO my_table VALUES (...);  
+Working: Stores records in table.
+
+### 9. RETRIEVING DATA
+Command: SELECT * FROM my_table;  
+Working: Fetches all records using Impala engine.
+
+### 10. APPLYING QUERIES
+Examples: WHERE, COUNT, AVG, ORDER BY  
+Working: Filters, counts, calculates, and sorts data.
+
+### 11. EXITING IMPALA
+Command: quit;  
+Working: Closes session.
+
+## WORKING FLOW
+Docker → Cloudera → Impala shell → create DB → create table → insert data → run queries
+
+## KEY CONCEPT
+Impala is a distributed SQL engine that executes queries using parallel processing for fast results.
+
+## CONCLUSION
+This experiment demonstrates how data is created, stored, and analyzed using Impala in a Hadoop-based environment.
+

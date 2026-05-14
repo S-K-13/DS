@@ -1,0 +1,488 @@
+# -------------------------------------------------
+# Assignment 7: Text Analytics (Corrected Version)
+# -------------------------------------------------
+
+import nltk
+import re
+import pandas as pd
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag
+
+# -------------------------------------------------
+# Download required packages (run once)
+# -------------------------------------------------
+
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')  
+
+# -------------------------------------------------
+# Initialize text
+# -------------------------------------------------
+
+text = "Tokenization is the first step in text analytics. The process of breaking down a text paragraph into smaller chunks such as words or sentences is called Tokenization."
+
+# -------------------------------------------------
+# Sentence Tokenization
+# -------------------------------------------------
+
+sentences = sent_tokenize(text)
+print("\nSentences:", sentences)
+
+# -------------------------------------------------
+# Word Tokenization
+# -------------------------------------------------
+
+words = word_tokenize(text)
+print("\nWords:", words)
+
+# -------------------------------------------------
+# POS Tagging
+# -------------------------------------------------
+
+print("\nPOS Tags:", pos_tag(words))
+
+# -------------------------------------------------
+# Text Cleaning
+# -------------------------------------------------
+
+text_clean = re.sub('[^a-zA-Z]', ' ', text)
+tokens = word_tokenize(text_clean.lower())
+
+# -------------------------------------------------
+# Stopwords Removal
+# -------------------------------------------------
+
+stop_words = set(stopwords.words("english"))
+
+filtered_words = []   # FIXED
+
+for w in tokens:
+    if w not in stop_words:
+        filtered_words.append(w)
+
+print("\nFiltered Words:", filtered_words)
+
+# -------------------------------------------------
+# Stemming
+# -------------------------------------------------
+
+ps = PorterStemmer()
+stemmed_words = []
+
+for w in filtered_words:
+    stemmed_words.append(ps.stem(w))
+
+print("\nStemmed Words:", stemmed_words)
+
+# -------------------------------------------------
+# Lemmatization
+# -------------------------------------------------
+
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = []
+
+for w in filtered_words:
+    lemmatized_words.append(lemmatizer.lemmatize(w))
+
+print("\nLemmatized Words:", lemmatized_words)
+
+# -------------------------------------------------
+# Comparison (Stemming vs Lemmatization)
+# -------------------------------------------------
+
+sample = "studies studying cries cry"
+sample_words = word_tokenize(sample)
+
+print("\nComparison:")
+for w in sample_words:
+    print(w, "-> Stem:", ps.stem(w), "Lemma:", lemmatizer.lemmatize(w))
+
+# -------------------------------------------------
+# TF-IDF (Manual)
+# -------------------------------------------------
+
+# Convert to lowercase (IMPORTANT FIX)
+documentA = 'Jupiter is the largest planet'.lower()
+documentB = 'Mars is the fourth planet from the sun'.lower()
+
+bagA = documentA.split()
+bagB = documentB.split()
+
+uniqueWords = set(bagA).union(set(bagB))
+
+# Count words
+dictA = dict.fromkeys(uniqueWords, 0)
+dictB = dict.fromkeys(uniqueWords, 0)
+
+for w in bagA:
+    dictA[w] += 1
+
+for w in bagB:
+    dictB[w] += 1
+
+# TF
+def computeTF(wordDict, doc):
+    tfDict = {}
+    total = len(doc)
+    for word, count in wordDict.items():
+        tfDict[word] = count / total
+    return tfDict
+
+tfA = computeTF(dictA, bagA)
+tfB = computeTF(dictB, bagB)
+
+# IDF
+import math
+
+def computeIDF(docs):
+    N = len(docs)
+    idfDict = dict.fromkeys(docs[0].keys(), 0)
+
+    for doc in docs:
+        for word, val in doc.items():
+            if val > 0:
+                idfDict[word] += 1
+
+    for word in idfDict:
+        idfDict[word] = math.log(N / idfDict[word])
+
+    return idfDict
+
+idf = computeIDF([dictA, dictB])
+
+# TF-IDF
+def computeTFIDF(tf, idf):
+    tfidf = {}
+    for word, val in tf.items():
+        tfidf[word] = val * idf[word]
+    return tfidf
+
+tfidfA = computeTFIDF(tfA, idf)
+tfidfB = computeTFIDF(tfB, idf)
+
+# Display result
+df = pd.DataFrame([tfidfA, tfidfB])
+print("\nTF-IDF Table:\n", df)
+
+//////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 7 – TEXT ANALYTICS USING TF-IDF
+
+## AIM
+To perform text preprocessing operations such as Tokenization, POS Tagging, Stopword Removal, Stemming, and Lemmatization, and to represent documents using Term Frequency (TF) and Inverse Document Frequency (IDF).
+
+---
+
+## CODE EXPLANATION (LINE BY LINE)
+
+### 1. IMPORTING LIBRARIES
+
+```python
+import nltk
+import re
+import pandas as pd
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag
+```
+
+- nltk → main library for Natural Language Processing  
+- re → used for text cleaning (removing punctuation)  
+- pandas → used to display TF-IDF results in table format  
+- sent_tokenize → splits paragraph into sentences  
+- word_tokenize → splits sentence into words  
+- stopwords → removes common English words  
+- PorterStemmer → performs stemming  
+- WordNetLemmatizer → performs lemmatization  
+- pos_tag → assigns grammatical tags  
+
+---
+
+### 2. DOWNLOADING REQUIRED PACKAGES
+
+```python
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')
+```
+
+- Downloads required datasets for tokenization, tagging, and processing  
+- Needed only once  
+- `punkt_tab` and `tagger_eng` are required in newer NLTK versions  
+
+---
+
+### 3. INITIALIZING TEXT
+
+```python
+text = "Tokenization is the first step in text analytics..."
+```
+
+- Sample text used for processing  
+
+---
+
+### 4. SENTENCE TOKENIZATION
+
+```python
+sentences = sent_tokenize(text)
+```
+
+- Splits paragraph into sentences  
+- Example:
+  "A. B." → ["A", "B"]  
+
+---
+
+### 5. WORD TOKENIZATION
+
+```python
+words = word_tokenize(text)
+```
+
+- Splits sentence into words  
+- Example:
+  "Text analytics" → ["Text", "analytics"]  
+
+---
+
+### 6. POS TAGGING
+
+```python
+pos_tag(words)
+```
+
+- Assigns parts of speech to each word  
+- Example:
+  - NN → noun  
+  - VB → verb  
+  - JJ → adjective  
+
+- Helps understand grammar and context  
+
+---
+
+### 7. TEXT CLEANING
+
+```python
+text_clean = re.sub('[^a-zA-Z]', ' ', text)
+tokens = word_tokenize(text_clean.lower())
+```
+
+- Removes punctuation, numbers, symbols  
+- Converts text to lowercase  
+- Ensures uniform processing  
+
+---
+
+### 8. STOPWORD REMOVAL
+
+```python
+stop_words = set(stopwords.words("english"))
+
+for w in tokens:
+    if w not in stop_words:
+        filtered_words.append(w)
+```
+
+- Removes common words like:
+  "is", "the", "and"  
+- These words do not add meaningful information  
+
+---
+
+### 9. STEMMING
+
+```python
+ps = PorterStemmer()
+ps.stem(word)
+```
+
+- Reduces words to root form  
+- Example:
+  - "studying" → "studi"  
+  - "running" → "run"  
+
+- Fast but may produce non-meaningful words  
+
+---
+
+### 10. LEMMATIZATION
+
+```python
+lemmatizer.lemmatize(word)
+```
+
+- Converts word into meaningful base form  
+- Example:
+  - "studies" → "study"  
+
+- More accurate than stemming  
+
+---
+
+### 11. STEMMING VS LEMMATIZATION
+
+```python
+sample = "studies studying cries cry"
+```
+
+Output comparison:
+
+| Word | Stem | Lemma |
+|------|------|------|
+| studies | studi | study |
+| studying | studi | studying |
+| cries | cri | cry |
+| cry | cry | cry |
+
+👉 Conclusion:
+- Stemming → cuts words  
+- Lemmatization → meaningful base form  
+
+---
+
+### 12. BAG OF WORDS (BoW)
+
+```python
+bagA = documentA.split()
+bagB = documentB.split()
+```
+
+- Converts sentences into list of words  
+- Ignores order and grammar  
+
+---
+
+### 13. UNIQUE WORDS
+
+```python
+uniqueWords = set(bagA).union(set(bagB))
+```
+
+- Creates vocabulary of all unique words from both documents  
+
+---
+
+### 14. WORD COUNT
+
+```python
+dict.fromkeys(uniqueWords, 0)
+```
+
+- Initializes dictionary with word count = 0  
+- Then counts frequency of each word  
+
+---
+
+### 15. TERM FREQUENCY (TF)
+
+```python
+tf[word] = count / total_words
+```
+
+Formula:
+TF = (Number of times word appears) / (Total words in document)
+
+- Measures importance of word in a document  
+
+---
+
+### 16. INVERSE DOCUMENT FREQUENCY (IDF)
+
+```python
+idf[word] = log(N / df)
+```
+
+Formula:
+IDF = log(Total documents / Documents containing word)
+
+- Reduces importance of common words  
+- Gives more weight to rare words  
+
+---
+
+### 17. TF-IDF CALCULATION
+
+```python
+tfidf[word] = tf[word] * idf[word]
+```
+
+- Combines TF and IDF  
+- Highlights important words  
+
+---
+
+### 18. DISPLAYING RESULT
+
+```python
+pd.DataFrame([tfidfA, tfidfB])
+```
+
+- Displays TF-IDF values in table format  
+
+---
+
+## FUNCTIONS USED AND PURPOSE
+
+- sent_tokenize() → sentence splitting  
+- word_tokenize() → word splitting  
+- pos_tag() → grammatical tagging  
+- stopwords.words() → remove common words  
+- PorterStemmer() → stemming  
+- WordNetLemmatizer() → lemmatization  
+- re.sub() → remove unwanted characters  
+- dict.fromkeys() → initialize dictionary  
+- math.log() → calculate IDF  
+- pandas.DataFrame() → display results  
+
+---
+
+## CONCLUSION
+
+In this assignment, text preprocessing techniques such as tokenization, POS tagging, stopword removal, stemming, and lemmatization are applied to clean text data. The cleaned text is then converted into numerical form using TF-IDF. TF measures word frequency in a document, while IDF measures importance across documents. TF-IDF helps identify significant words and is widely used in text analytics, search engines, and machine learning applications.

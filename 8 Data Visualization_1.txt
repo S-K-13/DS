@@ -1,0 +1,408 @@
+# -------------------------------------------------
+# Assignment 8: Data Visualization (Titanic Dataset)
+# -------------------------------------------------
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# -------------------------------------------------
+# Step 2: Load Dataset
+# -------------------------------------------------
+
+# Method 1: Load inbuilt Titanic dataset (USED)
+df = sns.load_dataset('titanic')
+
+# Method 2: Load dataset from CSV (ALTERNATIVE)
+# df = pd.read_csv("titanic.csv")
+
+# Display dataset
+print("First 5 rows:")
+print(df.head())
+
+print("\nColumn names:")
+print(df.columns)
+
+# -------------------------------------------------
+# Step 3: Basic Information
+# -------------------------------------------------
+
+print("\nDataset Info:")
+print(df.info())
+
+# -------------------------------------------------
+# Step 4: Distribution Plot (Age)
+# -------------------------------------------------
+
+# Histogram of age
+sns.histplot(df['age'], bins=10, kde=False)
+plt.title("Age Distribution")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.show()
+
+# -------------------------------------------------
+# Step 5: Joint Plot (Age vs Fare)
+# -------------------------------------------------
+
+sns.jointplot(x='age', y='fare', data=df, kind='scatter')
+plt.show()
+
+# -------------------------------------------------
+# Step 6: Rug Plot (Fare)
+# -------------------------------------------------
+
+sns.rugplot(df['fare'])
+plt.title("Rug Plot of Fare")
+plt.show()
+
+# -------------------------------------------------
+# Step 7: Bar Plot (Sex vs Age)
+# -------------------------------------------------
+
+sns.barplot(x='sex', y='age', data=df)
+plt.title("Average Age by Gender")
+plt.show()
+
+# -------------------------------------------------
+# Step 8: Count Plot (Gender Count)
+# -------------------------------------------------
+
+sns.countplot(x='sex', data=df)
+plt.title("Count of Male and Female Passengers")
+plt.show()
+
+# -------------------------------------------------
+# Step 9: Box Plot (Sex vs Age)
+# -------------------------------------------------
+
+sns.boxplot(x='sex', y='age', data=df)
+plt.title("Box Plot of Age by Gender")
+plt.show()
+
+# -------------------------------------------------
+# Step 10: Violin Plot (Sex vs Age)
+# -------------------------------------------------
+
+sns.violinplot(x='sex', y='age', data=df)
+plt.title("Violin Plot of Age by Gender")
+plt.show()
+
+# -------------------------------------------------
+# Step 11: Strip Plot
+# -------------------------------------------------
+
+sns.stripplot(x='sex', y='age', data=df, jitter=True)
+plt.title("Strip Plot")
+plt.show()
+
+# -------------------------------------------------
+# Step 12: Swarm Plot
+# -------------------------------------------------
+
+sns.swarmplot(x='sex', y='age', data=df)
+plt.title("Swarm Plot")
+plt.show()
+
+# -------------------------------------------------
+# Step 13: Heatmap (Correlation Matrix)
+# -------------------------------------------------
+
+corr = df.corr(numeric_only=True)
+
+sns.heatmap(corr, annot=True)
+plt.title("Correlation Heatmap")
+plt.show()
+
+# -------------------------------------------------
+# Step 14: Histogram of Fare (MAIN QUESTION)
+# -------------------------------------------------
+
+sns.histplot(df['fare'], bins=10, kde=False)
+plt.title("Fare Distribution")
+plt.xlabel("Fare")
+plt.ylabel("Frequency")
+plt.show()
+
+///////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 8 – DATA VISUALIZATION USING TITANIC DATASET
+
+## AIM
+To perform data visualization using the Titanic dataset and identify patterns using various plots such as distribution plots, categorical plots, and matrix plots. Also, to analyze the distribution of ticket fares using a histogram.
+
+---
+
+## CODE EXPLANATION (LINE BY LINE)
+
+### 1. IMPORTING LIBRARIES
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+- pandas → used to handle dataset in tabular form  
+- numpy → used for numerical operations  
+- matplotlib.pyplot → used for plotting graphs  
+- seaborn → advanced visualization library built on matplotlib  
+
+Why used: These libraries help in data analysis and visualization.
+
+---
+
+### 2. LOADING DATASET
+
+```python
+df = sns.load_dataset('titanic')
+```
+
+- load_dataset() → loads inbuilt dataset from seaborn  
+- 'titanic' → dataset name  
+- df → DataFrame storing dataset  
+
+Alternative:
+```python
+df = pd.read_csv("titanic.csv")
+```
+
+Why used: To load dataset for visualization.
+
+---
+
+### 3. DISPLAYING DATA
+
+```python
+print(df.head())
+print(df.columns)
+```
+
+- head() → displays first 5 rows  
+- columns → shows column names  
+
+Why used: To understand dataset structure.
+
+---
+
+### 4. DATASET INFORMATION
+
+```python
+df.info()
+```
+
+- info() → shows data types, null values, and structure  
+
+Why used: To check dataset details before plotting.
+
+---
+
+### 5. DISTRIBUTION PLOT (AGE)
+
+```python
+sns.histplot(df['age'], bins=10, kde=False)
+```
+
+- histplot() → plots histogram  
+- df['age'] → age column  
+- bins=10 → divides data into 10 intervals  
+- kde=False → removes density curve  
+
+Why used: To see how age is distributed among passengers.
+
+---
+
+### 6. JOINT PLOT (AGE vs FARE)
+
+```python
+sns.jointplot(x='age', y='fare', data=df, kind='scatter')
+```
+
+- jointplot() → combines scatter plot + distributions  
+- x='age' → x-axis  
+- y='fare' → y-axis  
+- kind='scatter' → scatter plot  
+
+Why used: To observe relationship between age and fare.
+
+---
+
+### 7. RUG PLOT
+
+```python
+sns.rugplot(df['fare'])
+```
+
+- rugplot() → shows small lines for each data point  
+
+Why used: To visualize distribution density of fare.
+
+---
+
+### 8. BAR PLOT (SEX vs AGE)
+
+```python
+sns.barplot(x='sex', y='age', data=df)
+```
+
+- barplot() → shows average values  
+- x='sex' → categorical variable  
+- y='age' → numeric variable  
+
+Why used: To compare average age of males and females.
+
+---
+
+### 9. COUNT PLOT
+
+```python
+sns.countplot(x='sex', data=df)
+```
+
+- countplot() → counts frequency of categories  
+
+Why used: To count number of male and female passengers.
+
+---
+
+### 10. BOX PLOT
+
+```python
+sns.boxplot(x='sex', y='age', data=df)
+```
+
+- boxplot() → shows quartiles and outliers  
+
+Why used: To analyze distribution of age across gender.
+
+---
+
+### 11. VIOLIN PLOT
+
+```python
+sns.violinplot(x='sex', y='age', data=df)
+```
+
+- violinplot() → shows full distribution shape  
+
+Why used: To get deeper understanding of data distribution.
+
+---
+
+### 12. STRIP PLOT
+
+```python
+sns.stripplot(x='sex', y='age', data=df, jitter=True)
+```
+
+- stripplot() → scatter plot for categorical data  
+- jitter=True → spreads points for clarity  
+
+Why used: To visualize individual data points.
+
+---
+
+### 13. SWARM PLOT
+
+```python
+sns.swarmplot(x='sex', y='age', data=df)
+```
+
+- swarmplot() → non-overlapping scatter plot  
+
+Why used: To clearly visualize distribution without overlap.
+
+---
+
+### 14. HEATMAP (CORRELATION)
+
+```python
+corr = df.corr(numeric_only=True)
+sns.heatmap(corr, annot=True)
+```
+
+- corr() → computes correlation between numeric columns  
+- heatmap() → displays correlation matrix  
+- annot=True → shows values inside cells  
+
+Why used: To understand relationship between variables.
+
+---
+
+### 15. HISTOGRAM OF FARE (MAIN REQUIREMENT)
+
+```python
+sns.histplot(df['fare'], bins=10, kde=False)
+```
+
+- Shows distribution of ticket prices  
+
+Why used:
+- To analyze how fares are distributed  
+- Identifies most common fare ranges  
+
+---
+
+## FUNCTIONS USED AND PURPOSE
+
+- load_dataset() → load dataset  
+- head() → display rows  
+- info() → dataset summary  
+- histplot() → histogram  
+- jointplot() → combined plot  
+- rugplot() → density visualization  
+- barplot() → average comparison  
+- countplot() → frequency count  
+- boxplot() → quartile distribution  
+- violinplot() → full distribution  
+- stripplot() → scatter with categories  
+- swarmplot() → non-overlapping scatter  
+- corr() → correlation  
+- heatmap() → correlation visualization  
+
+---
+
+## CONCLUSION
+
+In this assignment, the Titanic dataset is visualized using various plots provided by the Seaborn library. Distribution plots help understand how data is spread, while categorical plots help compare different categories. Advanced plots provide deeper insights into data distribution. Heatmaps are used to identify relationships between variables. Finally, a histogram of fare is used to analyze how ticket prices are distributed among passengers. These visualizations help in identifying patterns and trends in the dataset.

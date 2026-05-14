@@ -1,0 +1,308 @@
+# -----------------------------------------------
+# Assignment 2: Data Wrangling II
+# -----------------------------------------------
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# -----------------------------------------------
+# Dataset (Given by Faculty - Alternative Method)
+# -----------------------------------------------
+
+# If asked to use manual dataset, uncomment below:
+
+data = {
+    "Student_ID": [101,102,103,104,105,106,107,108,109,110],
+    "Gender": ["Male","Female","Female","Male","Female","Male","Male","Female","Male","Female"],
+    "Study_Hours": [2,5,3,8,np.nan,6,4,10,1,3],
+    "Attendance": [75,88,90,95,85,110,70,65,80,78],
+    "Internal_Marks": [20,25,18,30,22,28,15,40,10,21],
+    "External_Marks": [45,50,40,60,48,55,35,70,30,44]
+}
+
+df = pd.DataFrame(data)
+
+# -----------------------------------------------
+# Step 2: Load Dataset
+# -----------------------------------------------
+
+# Method 1: Load dataset from local CSV file (USED)
+#df = pd.read_csv("student.csv")
+
+# Method 2: Load dataset from URL (ALTERNATIVE)
+# url = "https://example.com/student.csv"
+# df = pd.read_csv(url)
+
+# Display dataset
+print("First 5 rows:")
+print(df.head())
+
+# -----------------------------------------------
+# Step 3: Check Missing Values
+# -----------------------------------------------
+
+print("\nChecking missing values:")
+print(df.isnull())
+
+print("\nMissing values count:")
+print(df.isnull().sum())
+
+# -----------------------------------------------
+# Step 4: Handle Missing Values
+# -----------------------------------------------
+
+# Fill missing values using mean
+mean_hours = df['Study_Hours'].mean()
+df['Study_Hours'] = df['Study_Hours'].fillna(mean_hours)
+
+print("\nAfter filling missing values:")
+print(df.isnull().sum())
+
+# -----------------------------------------------
+# Step 5: Check Inconsistencies
+# -----------------------------------------------
+
+# Example: Attendance should not be more than 100
+df.loc[df['Attendance'] > 100, 'Attendance'] = 100
+
+print("\nAfter fixing inconsistent values (Attendance):")
+print(df['Attendance'])
+
+# -----------------------------------------------
+# Step 6: Detect Outliers using Boxplot
+# -----------------------------------------------
+
+print("\nBoxplot for outlier detection:")
+df.boxplot(column=['Internal_Marks','External_Marks'])
+plt.show()
+
+# -----------------------------------------------
+# Step 7: Detect Outliers using condition
+# -----------------------------------------------
+
+outliers = np.where(df['Internal_Marks'] > 35)
+print("\nOutliers in Internal_Marks index:", outliers)
+
+# -----------------------------------------------
+# Step 8: Handle Outliers
+# -----------------------------------------------
+
+mean_marks = df['Internal_Marks'].mean()
+df.loc[df['Internal_Marks'] > 35, 'Internal_Marks'] = mean_marks
+
+print("\nAfter handling outliers:")
+print(df['Internal_Marks'])
+
+# -----------------------------------------------
+# Step 9: Data Transformation
+# -----------------------------------------------
+
+# Example: Create Total Marks
+df['Total_Marks'] = df['Internal_Marks'] + df['External_Marks']
+
+print("\nAfter transformation (Total_Marks added):")
+print(df[['Internal_Marks','External_Marks','Total_Marks']])
+
+# -----------------------------------------------
+# Step 10: Reduce Skewness (Log Transformation)
+# -----------------------------------------------
+
+df['log_Internal'] = np.log10(df['Internal_Marks'])
+
+print("\nAfter log transformation:")
+print(df[['Internal_Marks','log_Internal']])
+
+# -----------------------------------------------
+# Final Dataset
+# -----------------------------------------------
+
+print("\nFinal Dataset:")
+print(df.head())
+
+////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 2 – DATA WRANGLING II
+
+## AIM
+To perform data wrangling operations such as handling missing values, detecting inconsistencies, identifying and treating outliers, and applying data transformation on a dataset using Python.
+
+## CODE EXPLANATION (LINE BY LINE)
+
+1. IMPORTING LIBRARIES
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+```
+import → used to include external libraries into the program so their functions can be used  
+pandas → powerful library used for handling structured data in tabular form (DataFrame)  
+as pd → alias given to pandas to make code shorter and easier to write  
+numpy → library used for numerical and mathematical operations  
+as np → short alias for numpy  
+matplotlib.pyplot → module used for creating graphs and visualizations  
+plt → alias used to call plotting functions easily  
+Why used: These libraries are required for data analysis, numerical computation, and visualization.
+
+2. DATASET (FACULTY PROVIDED - COMMENTED)
+```python
+# data = { ... }
+# df = pd.DataFrame(data)
+```
+Dictionary → stores dataset in key-value format where keys act as column names  
+pd.DataFrame() → converts dictionary into tabular structure with rows and columns  
+Why used: This method allows manual creation of dataset if CSV file is not available and is useful in exams when dataset is provided directly.
+
+3. LOADING DATASET
+```python
+df = pd.read_csv("student.csv")
+```
+pd.read_csv() → reads data from CSV file and converts it into DataFrame  
+"student.csv" → name of dataset file stored locally  
+df → variable used to store dataset  
+Why used: To load dataset into memory so that it can be processed and analyzed.
+
+4. DISPLAYING DATA
+```python
+print(df.head())
+```
+head() → returns first 5 rows of dataset  
+print() → displays output on screen  
+Why used: To quickly verify whether dataset is loaded correctly and understand its structure.
+
+5. CHECKING MISSING VALUES
+```python
+df.isnull()
+df.isnull().sum()
+```
+isnull() → checks each cell and returns True if value is missing (NaN), otherwise False  
+sum() → counts number of missing values column-wise  
+Why used: Missing values can affect analysis and model performance, so they must be identified first.
+
+6. HANDLING MISSING VALUES
+```python
+mean_hours = df['Study_Hours'].mean()
+df['Study_Hours'] = df['Study_Hours'].fillna(mean_hours)
+```
+mean() → calculates average of Study_Hours column  
+fillna() → replaces missing values with specified value  
+Why used: Replacing missing values with mean maintains data distribution and avoids data loss compared to deleting rows.
+
+7. HANDLING INCONSISTENT DATA
+```python
+df.loc[df['Attendance'] > 100, 'Attendance'] = 100
+```
+loc[] → label-based indexing used to select rows and columns based on condition  
+Condition → selects rows where Attendance value is greater than 100  
+Why used: Attendance cannot logically exceed 100%, so invalid values are corrected to maintain data accuracy.
+
+8. DETECTING OUTLIERS (BOXPLOT)
+```python
+df.boxplot(column=['Internal_Marks','External_Marks'])
+plt.show()
+```
+boxplot() → graphical representation showing median, quartiles, and outliers  
+plt.show() → displays the plot  
+Why used: Helps visually identify extreme values that differ significantly from rest of data.
+
+9. DETECTING OUTLIERS (CONDITION)
+```python
+outliers = np.where(df['Internal_Marks'] > 35)
+```
+np.where() → returns indices of elements satisfying given condition  
+Condition → selects values greater than threshold (35)  
+Why used: Provides exact position of outliers for further processing.
+
+10. HANDLING OUTLIERS
+```python
+mean_marks = df['Internal_Marks'].mean()
+df.loc[df['Internal_Marks'] > 35, 'Internal_Marks'] = mean_marks
+```
+mean() → calculates average marks  
+loc[] → replaces outlier values using condition  
+Why used: Outliers can distort statistical results, so replacing them with mean helps stabilize data.
+
+11. DATA TRANSFORMATION
+```python
+df['Total_Marks'] = df['Internal_Marks'] + df['External_Marks']
+```
+New column creation → combines two columns  
+Why used: Generates a new feature (Total_Marks) which can be useful for analysis and decision making.
+
+12. REDUCING SKEWNESS
+```python
+df['log_Internal'] = np.log10(df['Internal_Marks'])
+```
+log10() → applies logarithmic transformation to values  
+Why used: Reduces skewness in data distribution and makes data more suitable for analysis and modeling.
+
+13. FINAL DATASET
+```python
+print(df.head())
+```
+head() → displays updated dataset after all operations  
+Why used: To verify that all preprocessing steps have been applied correctly.
+
+## FUNCTIONS USED AND PURPOSE
+read_csv() → loads dataset from CSV file  
+head() → displays initial rows  
+isnull() → identifies missing values  
+sum() → counts values  
+mean() → calculates average  
+fillna() → replaces missing values  
+loc[] → selects and modifies data conditionally  
+boxplot() → visualizes data distribution and outliers  
+np.where() → detects positions of values  
+log10() → transforms data  
+
+## CONCLUSION
+In this assignment, raw data is cleaned and prepared using multiple preprocessing techniques. Missing values are handled using mean substitution, inconsistencies are corrected using logical conditions, and outliers are detected using both visualization and conditional methods. These outliers are replaced with mean values to reduce their impact. New features are created through data transformation, and skewness is reduced using logarithmic scaling. As a result, the dataset becomes clean, consistent, and suitable for further data analysis or machine learning applications.

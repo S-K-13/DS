@@ -1,0 +1,211 @@
+# -------------------------------------------------
+# Assignment 9: Data Visualization II (Box Plot)
+# -------------------------------------------------
+
+# Step 1: Import required libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# -------------------------------------------------
+# Step 2: Load Dataset
+# -------------------------------------------------
+
+# Method 1: Load inbuilt Titanic dataset (USED)
+df = sns.load_dataset('titanic')
+
+# Method 2: Load dataset from CSV file (ALTERNATIVE)
+# df = pd.read_csv("titanic.csv")
+
+# Display dataset
+print("First 5 rows:")
+print(df.head())
+
+print("\nColumn names:")
+print(df.columns)
+
+# -------------------------------------------------
+# Step 3: Basic Dataset Info
+# -------------------------------------------------
+
+print("\nDataset Info:")
+print(df.info())
+
+# -------------------------------------------------
+# Step 4: Box Plot (MAIN REQUIREMENT)
+# -------------------------------------------------
+
+sns.boxplot(x='sex', y='age', data=df, hue='survived')
+
+plt.title("Age Distribution by Gender and Survival")
+plt.xlabel("Gender")
+plt.ylabel("Age")
+
+plt.show()
+
+# -------------------------------------------------
+# Step 5: Observations (IMPORTANT FOR EXAM)
+# -------------------------------------------------
+
+print("\nOBSERVATIONS:")
+
+print("1. Younger passengers have higher survival rate compared to older passengers.")
+print("2. Female passengers show higher survival compared to male passengers.")
+print("3. Age distribution of females is more spread compared to males.")
+print("4. There are some outliers visible in both male and female age groups.")
+print("5. Median age differs between survived and non-survived passengers.")
+
+///////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 9 – DATA VISUALIZATION II (BOX PLOT USING TITANIC DATASET)
+
+## AIM
+To visualize the distribution of age with respect to gender and survival status using a box plot on the Titanic dataset and draw meaningful observations.
+
+## CODE EXPLANATION (LINE BY LINE)
+
+### 1. IMPORTING LIBRARIES
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+pandas → handles dataset in tabular format  
+matplotlib.pyplot → used for plotting graphs  
+seaborn → advanced visualization library  
+
+Why used: Required for data handling and visualization.
+
+### 2. LOADING DATASET
+```python
+df = sns.load_dataset('titanic')
+```
+load_dataset() → loads inbuilt dataset  
+df → DataFrame storing dataset  
+
+Alternative:
+```python
+df = pd.read_csv("titanic.csv")
+```
+Why used: To import dataset.
+
+### 3. DISPLAYING DATA
+```python
+print(df.head())
+print(df.columns)
+```
+head() → shows first 5 rows  
+columns → displays column names  
+
+Why used: To understand dataset structure.
+
+### 4. DATASET INFORMATION
+```python
+df.info()
+```
+info() → shows rows, columns, data types, missing values  
+
+Why used: To inspect dataset before plotting.
+
+### 5. BOX PLOT (MAIN PART)
+```python
+sns.boxplot(x='sex', y='age', data=df, hue='survived')
+```
+boxplot() → creates box plot  
+x='sex' → categorical variable  
+y='age' → numeric variable  
+hue='survived' → separates survived vs not survived  
+
+Why used: To compare age distribution across gender and survival.
+
+### 6. LABELING GRAPH
+```python
+plt.title("Age Distribution by Gender and Survival")
+plt.xlabel("Gender")
+plt.ylabel("Age")
+```
+title() → adds title  
+xlabel(), ylabel() → label axes  
+
+Why used: Makes graph clear and readable.
+
+### 7. DISPLAY GRAPH
+```python
+plt.show()
+```
+show() → displays plot  
+
+Why used: Required to render visualization.
+
+### 8. OBSERVATIONS
+print("OBSERVATIONS:")
+Used to display conclusions from the plot.
+
+## UNDERSTANDING BOX PLOT
+A box plot shows:
+- Minimum value  
+- First Quartile (Q1)  
+- Median (Q2)  
+- Third Quartile (Q3)  
+- Maximum value  
+- Outliers  
+
+Structure:
+Box → Q1 to Q3  
+Line → Median  
+Whiskers → Range  
+Dots → Outliers  
+
+## INTERPRETATION
+1. Younger passengers have higher survival chances  
+2. Female passengers survived more than males  
+3. Female age distribution is wider  
+4. Outliers are present  
+5. Median age differs between survived and non-survived  
+
+## FUNCTIONS USED
+load_dataset() → load data  
+head() → display rows  
+info() → dataset summary  
+boxplot() → create plot  
+title(), xlabel(), ylabel() → labeling  
+show() → display plot  
+
+## CONCLUSION
+A box plot is used to visualize age distribution based on gender and survival. It shows quartiles, median, and outliers, helping identify survival patterns and data spread effectively.

@@ -1,0 +1,251 @@
+# -------------------------------------------------
+# Assignment 10: Data Visualization III (Iris Dataset)
+# -------------------------------------------------
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# -------------------------------------------------
+# Step 2: Load Dataset
+# -------------------------------------------------
+
+# Method 1: Load dataset using seaborn (USED)
+df = sns.load_dataset('iris')
+
+# Method 2: Load dataset from CSV file (ALTERNATIVE)
+# df = pd.read_csv("iris.csv")
+
+# Display dataset
+print("First 5 rows:")
+print(df.head())
+
+# -------------------------------------------------
+# Step 3: List Features and Their Types
+# -------------------------------------------------
+
+print("\nFeatures and Data Types:")
+print(df.dtypes)
+
+print("\nFeature Classification:")
+for col in df.columns:
+    if df[col].dtype == 'object':
+        print(col, "-> Nominal (Categorical)")
+    else:
+        print(col, "-> Numeric")
+
+# -------------------------------------------------
+# Step 4: Histogram for Each Feature
+# -------------------------------------------------
+
+numeric_cols = df.select_dtypes(include=np.number).columns
+
+for col in numeric_cols:
+    plt.figure()
+    plt.hist(df[col], bins=10)
+    plt.title("Histogram of " + col)
+    plt.xlabel(col)
+    plt.ylabel("Frequency")
+    plt.show()
+
+# -------------------------------------------------
+# Step 5: Boxplot for Each Feature
+# -------------------------------------------------
+
+for col in numeric_cols:
+    plt.figure()
+    sns.boxplot(y=df[col])
+    plt.title("Boxplot of " + col)
+    plt.show()
+
+# -------------------------------------------------
+# Step 6: Observations (Inference)
+# -------------------------------------------------
+
+print("\nOBSERVATIONS:")
+print("1. All features except 'species' are numeric.")
+print("2. Histograms show distribution of each feature.")
+print("3. Boxplots help identify outliers.")
+print("4. Petal features show more variation than sepal features.")
+print("5. Some outliers are visible in boxplots.")
+print("6. Histogram shows distribution shape, while boxplot shows spread and outliers.")
+
+////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 10 – DATA VISUALIZATION III (IRIS DATASET)
+
+## AIM
+To analyze the Iris dataset by identifying feature types, visualizing distributions using histograms and boxplots, and detecting outliers.
+
+## CODE EXPLANATION
+
+### 1. IMPORTING LIBRARIES
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+pandas → tabular data handling  
+numpy → numerical operations  
+matplotlib.pyplot → plotting graphs  
+seaborn → advanced visualization  
+
+Why used: Required for analysis and visualization.
+
+### 2. LOADING DATASET
+```python
+df = sns.load_dataset('iris')
+```
+load_dataset() → loads dataset  
+df → stores dataset  
+
+Alternative:
+```python
+df = pd.read_csv("iris.csv")
+```
+Why used: To import dataset.
+
+### 3. DISPLAYING DATA
+```python
+print(df.head())
+```
+head() → first 5 rows  
+
+Why used: Understand dataset structure.
+
+### 4. FEATURES AND DATA TYPES
+```python
+print(df.dtypes)
+```
+dtypes → shows data types  
+
+Why used: Identify numeric and nominal features.
+
+### 5. FEATURE CLASSIFICATION
+```python
+for col in df.columns:
+    if df[col].dtype == 'object':
+        print(col, "-> Nominal")
+    else:
+        print(col, "-> Numeric")
+```
+object → categorical  
+else → numeric  
+
+Why used: Classify features.
+
+### 6. SELECT NUMERIC FEATURES
+```python
+numeric_cols = df.select_dtypes(include=np.number).columns
+```
+select_dtypes() → selects numeric columns  
+
+Why used: Only numeric data used for plots.
+
+### 7. HISTOGRAM FOR EACH FEATURE
+```python
+for col in numeric_cols:
+    plt.hist(df[col], bins=10)
+```
+hist() → histogram  
+bins=10 → intervals  
+
+Why used: Shows distribution and spread.
+
+### 8. BOXPLOT FOR EACH FEATURE
+```python
+sns.boxplot(y=df[col])
+```
+boxplot() → quartile-based plot  
+
+Why used: Detects outliers and variation.
+
+### 9. DISPLAYING PLOTS
+```python
+plt.show()
+```
+show() → display graph  
+
+Why used: Required to render plots.
+
+### 10. OBSERVATIONS
+print("OBSERVATIONS:") → prints conclusions  
+
+Why used: Required inference step.
+
+## UNDERSTANDING VISUALS
+Histogram → shows distribution, frequency, shape  
+Boxplot → shows median, quartiles, spread, outliers  
+
+## INTERPRETATION
+1. All features except 'species' are numeric  
+2. Histograms show feature distributions  
+3. Petal features vary more than sepal features  
+4. Boxplots reveal outliers  
+5. Histogram shows distribution, boxplot shows spread and outliers  
+
+## FUNCTIONS USED
+load_dataset() → load data  
+head() → display rows  
+dtypes → check types  
+select_dtypes() → select numeric columns  
+hist() → histogram  
+boxplot() → boxplot  
+show() → display plots  
+
+## CONCLUSION
+The Iris dataset is analyzed using histograms and boxplots. Histograms show how values are distributed, while boxplots identify spread and outliers. This helps in understanding data patterns and feature behavior.

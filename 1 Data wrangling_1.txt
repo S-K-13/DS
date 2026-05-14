@@ -1,0 +1,171 @@
+# -------------------------------
+# Assignment 1: Data Wrangling I
+# -------------------------------
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing
+
+# ---------------------------------------
+# Step 2: Load Dataset
+# ---------------------------------------
+
+# Method 1: Load dataset from local CSV file (USED)
+df = pd.read_csv("Iris.csv")
+
+# Method 2: Load dataset from URL (ALTERNATIVE)
+# url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+# col_names = ['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm','Species']
+# df = pd.read_csv(url, names=col_names)
+
+# Display first 5 rows
+print("First 5 rows of dataset:")
+print(df.head())
+
+# ---------------------------------------
+# Step 3: Dataset Description
+# ---------------------------------------
+
+print("\nDataset Shape (Rows, Columns):")
+print(df.shape)
+
+print("\nColumn Names:")
+print(df.columns)
+
+print("\nBasic Information:")
+print(df.info())
+
+print("\nStatistical Summary:")
+print(df.describe())
+
+# ---------------------------------------
+# Step 4: Check Missing Values
+# ---------------------------------------
+
+print("\nChecking Missing Values:")
+print(df.isnull())
+
+print("\nMissing values count (column-wise):")
+print(df.isnull().sum())
+
+print("\nTotal Missing Values:")
+print(df.isnull().sum().sum())
+
+# ---------------------------------------
+# Step 5: Data Types and Formatting
+# ---------------------------------------
+
+print("\nData Types of each column:")
+print(df.dtypes)
+
+# Convert data types if required
+df['SepalLengthCm'] = df['SepalLengthCm'].astype(float)
+df['SepalWidthCm'] = df['SepalWidthCm'].astype(float)
+df['PetalLengthCm'] = df['PetalLengthCm'].astype(float)
+df['PetalWidthCm'] = df['PetalWidthCm'].astype(float)
+
+print("\nData Types after conversion:")
+print(df.dtypes)
+
+# ---------------------------------------
+# Step 6: Data Normalization (Min-Max Scaling)
+# ---------------------------------------
+
+# Select numerical columns
+num_cols = ['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm']
+
+# Create scaler object
+scaler = preprocessing.MinMaxScaler()
+
+# Apply normalization
+df[num_cols] = scaler.fit_transform(df[num_cols])
+
+print("\nData after Normalization:")
+print(df.head())
+
+# ---------------------------------------
+# Step 7: Convert Categorical to Numerical
+# ---------------------------------------
+
+# Label Encoding for Species column
+label_encoder = preprocessing.LabelEncoder()
+
+df['Species'] = label_encoder.fit_transform(df['Species'])
+
+print("\nDataset after Label Encoding:")
+print(df.head())
+
+# ---------------------------------------
+# Final Dataset Info
+# ---------------------------------------
+
+print("\nFinal Dataset Information:")
+print(df.info())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+Assignment 1: Data Wrangling I – Explanation
+
+Step 1: Importing Required Libraries
+In this step, the required Python libraries are imported. The keyword import is used to include libraries in the program. The pandas library is used for data handling and analysis, numpy is used for numerical operations, and sklearn.preprocessing is used for data normalization and encoding. The keyword as is used to give a short name to libraries, for example pandas as pd.
+
+Step 2: Loading the Dataset
+The dataset is loaded using the pd.read_csv() function. This function reads a CSV file and converts it into a DataFrame. The dataset file used is "Iris.csv". An alternative method is also provided in the code to load the dataset using a URL, but it is commented. The head() function is used to display the first 5 rows of the dataset.
+
+Step 3: Understanding the Dataset
+Various functions are used to understand the dataset. The shape keyword is used to find the number of rows and columns in the dataset. The columns keyword is used to display the column names. The info() function provides information about the dataset such as data types and non-null values. The describe() function gives statistical information like mean, minimum, maximum, and standard deviation. These functions help in understanding the dataset structure.
+
+Step 4: Checking Missing Values
+Missing values are checked using the isnull() function. This function returns True if a value is missing and False if it is not. The isnull().sum() function is used to count missing values column-wise. The isnull().sum().sum() function gives the total number of missing values in the dataset.
+
+Step 5: Data Types and Formatting
+The dtypes keyword is used to check the data type of each column. If any column is not in the correct format, it is converted using the astype() function. For example, numerical columns are converted into float type for proper processing.
+
+Step 6: Data Normalization
+Data normalization is performed using the MinMaxScaler() function from sklearn.preprocessing. This method scales all numerical values between 0 and 1. First, the numerical columns are selected and stored in a list. Then the scaler object is created. The fit_transform() function is used to apply normalization. The fit() part learns the minimum and maximum values, and the transform() part scales the data.
+
+Step 7: Converting Categorical Data
+Categorical data such as the Species column is converted into numerical form using LabelEncoder(). Machines cannot understand text data, so it is converted into numbers. The fit_transform() function assigns numerical values to each category, for example 0, 1, and 2.
+
+Final Step
+Finally, the dataset is displayed again using the info() function to verify all changes. Now the dataset is clean, formatted, normalized, and ready for further analysis.

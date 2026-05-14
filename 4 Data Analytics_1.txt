@@ -1,0 +1,321 @@
+# -------------------------------------------------
+# Assignment 4: Linear Regression - Boston Housing
+# -------------------------------------------------
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# -------------------------------------------------
+# Step 2: Load Dataset
+# -------------------------------------------------
+
+# Method 1: Load dataset from local CSV file (USED)
+df = pd.read_csv("housing.csv")
+
+# Method 2: Load dataset from URL (ALTERNATIVE)
+# url = "https://raw.githubusercontent.com/selva86/datasets/master/BostonHousing.csv"
+# df = pd.read_csv(url)
+
+# Method 3: Load dataset from sklearn (ALTERNATIVE - deprecated but for reference)
+# from sklearn.datasets import load_boston
+# boston = load_boston()
+# df = pd.DataFrame(boston.data, columns=boston.feature_names)
+# df['medv'] = boston.target
+
+# Display dataset
+print("First 5 rows:")
+print(df.head())
+
+print("\nColumn names:")
+print(df.columns)
+
+# -------------------------------------------------
+# Step 3: Check dataset information
+# -------------------------------------------------
+
+print("\nDataset Info:")
+print(df.info())
+
+print("\nStatistical Summary:")
+print(df.describe())
+
+# -------------------------------------------------
+# Step 4: Select Features and Target
+# -------------------------------------------------
+
+# Features (independent variables)
+X = df.drop('medv', axis=1)
+
+# Target (dependent variable - house price)
+y = df['medv']
+
+# -------------------------------------------------
+# Step 5: Split dataset into training and testing
+# -------------------------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print("\nTraining data size:", X_train.shape)
+print("Testing data size:", X_test.shape)
+
+# -------------------------------------------------
+# Step 6: Create Linear Regression Model
+# -------------------------------------------------
+
+model = LinearRegression()
+
+# Train the model
+model.fit(X_train, y_train)
+
+# -------------------------------------------------
+# Step 7: Make Predictions
+# -------------------------------------------------
+
+y_pred = model.predict(X_test)
+
+print("\nPredicted values:")
+print(y_pred[:5])
+
+# -------------------------------------------------
+# Step 8: Evaluate Model
+# -------------------------------------------------
+
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print("\nMean Squared Error:", mse)
+print("R2 Score:", r2)
+
+# -------------------------------------------------
+# Step 9: Visualization (Actual vs Predicted)
+# -------------------------------------------------
+
+plt.scatter(y_test, y_pred)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Actual vs Predicted House Prices")
+plt.show()
+
+////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 4 – LINEAR REGRESSION (BOSTON HOUSING)
+
+## AIM
+To build a Linear Regression model using Python to predict house prices based on various features from the Boston Housing dataset and evaluate the performance of the model.
+
+## CODE EXPLANATION (LINE BY LINE)
+
+1. IMPORTING LIBRARIES
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+```
+import → used to include external libraries  
+pandas → used for handling dataset in tabular form  
+numpy → used for numerical operations  
+matplotlib.pyplot → used for visualization (graphs)  
+train_test_split → splits dataset into training and testing sets  
+LinearRegression → used to create regression model  
+mean_squared_error → calculates prediction error  
+r2_score → measures model accuracy  
+
+Why used: These libraries are required to load data, build model, evaluate performance, and visualize results.
+
+2. LOADING DATASET
+```python
+df = pd.read_csv("housing.csv")
+```
+pd.read_csv() → reads CSV file and converts it into DataFrame  
+df → stores dataset  
+
+Alternative Methods:
+- URL → load dataset directly from internet  
+- sklearn → load dataset programmatically (deprecated)  
+
+Why used: To import Boston Housing dataset for analysis.
+
+3. DISPLAYING DATA
+```python
+print(df.head())
+print(df.columns)
+```
+head() → shows first 5 rows  
+columns → displays column names  
+
+Why used: To understand dataset structure and verify column names.
+
+4. CHECKING DATASET INFORMATION
+```python
+print(df.info())
+print(df.describe())
+```
+info() → shows data types, non-null values, and structure  
+describe() → provides statistical summary (mean, std, min, max, etc.)  
+
+Why used: To understand dataset properties before modeling.
+
+5. SELECTING FEATURES AND TARGET
+```python
+X = df.drop('medv', axis=1)
+y = df['medv']
+```
+drop() → removes target column from dataset  
+axis=1 → indicates column removal  
+X → independent variables (features)  
+y → dependent variable (target)  
+
+Why used: Model uses features (X) to predict target (y).
+
+6. SPLITTING DATASET
+```python
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+```
+train_test_split() → splits dataset  
+test_size=0.2 → 20% data used for testing  
+random_state=42 → ensures same split every time  
+
+Why used: To train model on one set and test it on unseen data.
+
+7. CREATING MODEL
+```python
+model = LinearRegression()
+```
+LinearRegression() → creates regression model  
+
+Why used: To establish relationship between features and target.
+
+8. TRAINING MODEL
+```python
+model.fit(X_train, y_train)
+```
+fit() → trains model using training data  
+
+Why used: Model learns relationship between input features and output.
+
+9. MAKING PREDICTIONS
+```python
+y_pred = model.predict(X_test)
+```
+predict() → predicts target values using test data  
+
+Why used: To check how well model performs on unseen data.
+
+10. DISPLAYING PREDICTIONS
+```python
+print(y_pred[:5])
+```
+Shows first 5 predicted values  
+
+Why used: To preview model output.
+
+11. MODEL EVALUATION
+```python
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+```
+mean_squared_error() → calculates average squared difference between actual and predicted values  
+r2_score() → measures how well model explains variance (range 0 to 1)  
+
+Why used: To evaluate model accuracy and performance.
+
+12. DISPLAYING RESULTS
+```python
+print(mse)
+print(r2)
+```
+Displays error and accuracy  
+
+Why used: To interpret model performance.
+
+13. VISUALIZATION
+```python
+plt.scatter(y_test, y_pred)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Actual vs Predicted House Prices")
+plt.show()
+```
+scatter() → plots actual vs predicted values  
+xlabel(), ylabel() → label axes  
+title() → adds graph title  
+show() → displays graph  
+
+Why used: To visually compare predicted values with actual values.
+
+## FUNCTIONS USED AND PURPOSE
+read_csv() → load dataset  
+head() → display initial rows  
+columns → show column names  
+info() → dataset structure  
+describe() → statistical summary  
+drop() → remove column  
+train_test_split() → split dataset  
+LinearRegression() → create model  
+fit() → train model  
+predict() → generate predictions  
+mean_squared_error() → calculate error  
+r2_score() → measure accuracy  
+scatter() → plot graph  
+
+## CONCLUSION
+In this assignment, a Linear Regression model is developed to predict house prices using the Boston Housing dataset. The dataset is first explored and prepared by separating features and target variables. It is then split into training and testing sets to ensure proper evaluation. The model is trained using training data and predictions are made on test data. The performance of the model is evaluated using Mean Squared Error and R2 Score. Finally, a scatter plot is used to visualize the relationship between actual and predicted values. The model successfully learns patterns in the data and provides predictions for house prices.

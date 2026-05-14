@@ -1,0 +1,368 @@
+# -------------------------------------------------
+# Assignment 5: Logistic Regression - Classification
+# -------------------------------------------------
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+
+# -------------------------------------------------
+# Step 2: Load Dataset
+# -------------------------------------------------
+
+# Method 1: Load dataset from local CSV file (USED)
+df = pd.read_csv("Social_Network_Ads.csv")
+
+# Method 2: Load dataset from URL (ALTERNATIVE)
+# url = "https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/master/Social_Network_Ads.csv"
+# df = pd.read_csv(url)
+
+print("First 5 rows:")
+print(df.head())
+
+print("\nColumn names:")
+print(df.columns)
+
+# -------------------------------------------------
+# Step 3: Check Missing Values
+# -------------------------------------------------
+
+print("\nMissing values in dataset:")
+print(df.isnull().sum())
+
+# -------------------------------------------------
+# Step 4: Convert Categorical to Numerical (if needed)
+# -------------------------------------------------
+
+# Gender column is categorical → convert using encoding
+if 'Gender' in df.columns:
+    df['Gender'] = df['Gender'].map({'Male': 0, 'Female': 1})
+
+print("\nAfter encoding Gender column:")
+print(df.head())
+
+# -------------------------------------------------
+# Step 5: Select Features and Target
+# -------------------------------------------------
+
+# Using Age and EstimatedSalary as features
+X = df[['Age', 'EstimatedSalary']]
+
+# Target variable
+y = df['Purchased']
+
+# -------------------------------------------------
+# Step 6: Split Dataset
+# -------------------------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=0
+)
+
+print("\nTraining data size:", X_train.shape)
+print("Testing data size:", X_test.shape)
+
+# -------------------------------------------------
+# Step 7: Feature Scaling
+# -------------------------------------------------
+
+from sklearn.preprocessing import StandardScaler
+
+sc = StandardScaler()
+
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# -------------------------------------------------
+# Step 8: Create Logistic Regression Model
+# -------------------------------------------------
+
+model = LogisticRegression()
+
+# Train the model
+model.fit(X_train, y_train)
+
+# -------------------------------------------------
+# Step 9: Make Predictions
+# -------------------------------------------------
+
+y_pred = model.predict(X_test)
+
+print("\nPredicted values:")
+print(y_pred[:10])
+
+# -------------------------------------------------
+# Step 10: Confusion Matrix
+# -------------------------------------------------
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("\nConfusion Matrix:")
+print(cm)
+
+# Extract values
+TN = cm[0][0]
+FP = cm[0][1]
+FN = cm[1][0]
+TP = cm[1][1]
+
+print("\nTN:", TN)
+print("FP:", FP)
+print("FN:", FN)
+print("TP:", TP)
+
+# -------------------------------------------------
+# Step 11: Performance Metrics
+# -------------------------------------------------
+
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+error_rate = (FP + FN) / (TP + TN + FP + FN)
+precision = TP / (TP + FP)
+recall = TP / (TP + FN)
+
+print("\nAccuracy:", accuracy)
+print("Error Rate:", error_rate)
+print("Precision:", precision)
+print("Recall:", recall)
+
+/////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 5 – LOGISTIC REGRESSION (CLASSIFICATION)
+
+## AIM
+To implement Logistic Regression using Python to classify whether a user will purchase a product based on features from the Social_Network_Ads dataset, and to evaluate the model using a confusion matrix and performance metrics such as Accuracy, Error Rate, Precision, and Recall.
+
+## CODE EXPLANATION (LINE BY LINE)
+
+1. IMPORTING LIBRARIES
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+```
+import → used to include external libraries  
+pandas → used for data handling in tabular format  
+numpy → used for numerical operations  
+matplotlib.pyplot → used for visualization (optional here)  
+train_test_split → splits dataset into training and testing sets  
+LogisticRegression → classification algorithm  
+confusion_matrix → evaluates classification performance  
+
+Why used: These libraries are required for preprocessing, model building, and evaluation.
+
+2. LOADING DATASET
+```python
+df = pd.read_csv("Social_Network_Ads.csv")
+```
+pd.read_csv() → reads CSV file and converts it into DataFrame  
+df → stores dataset  
+
+Alternative Method:
+Dataset can also be loaded using URL.
+
+Why used: To import dataset into memory for processing.
+
+3. DISPLAYING DATA
+```python
+print(df.head())
+print(df.columns)
+```
+head() → displays first 5 rows  
+columns → shows column names  
+
+Why used: To understand dataset structure.
+
+4. CHECKING MISSING VALUES
+```python
+df.isnull().sum()
+```
+isnull() → checks for missing values  
+sum() → counts missing values column-wise  
+
+Why used: Missing values must be identified before training model.
+
+5. CONVERTING CATEGORICAL DATA
+```python
+df['Gender'] = df['Gender'].map({'Male': 0, 'Female': 1})
+```
+map() → converts categorical values into numerical form  
+
+Why used: Machine learning models require numerical input, so categorical data must be encoded.
+
+6. SELECTING FEATURES AND TARGET
+```python
+X = df[['Age', 'EstimatedSalary']]
+y = df['Purchased']
+```
+X → independent variables (features)  
+y → dependent variable (target)  
+
+Why used: Model uses features to predict whether user purchased or not.
+
+7. SPLITTING DATASET
+```python
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+```
+train_test_split() → splits dataset into training and testing  
+test_size=0.25 → 25% data used for testing  
+random_state=0 → ensures reproducibility  
+
+Why used: To evaluate model on unseen data.
+
+8. FEATURE SCALING
+```python
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+```
+StandardScaler() → standardizes data (mean = 0, std = 1)  
+fit_transform() → learns and transforms training data  
+transform() → applies same scaling to test data  
+
+Why used: Logistic regression performs better when features are scaled.
+
+9. CREATING MODEL
+```python
+model = LogisticRegression()
+```
+LogisticRegression() → creates classification model  
+
+Why used: To classify data into two categories (0 or 1).
+
+10. TRAINING MODEL
+```python
+model.fit(X_train, y_train)
+```
+fit() → trains model using training data  
+
+Why used: Model learns relationship between input features and output.
+
+11. MAKING PREDICTIONS
+```python
+y_pred = model.predict(X_test)
+```
+predict() → predicts output for test data  
+
+Why used: To check model performance.
+
+12. CONFUSION MATRIX
+```python
+cm = confusion_matrix(y_test, y_pred)
+```
+confusion_matrix() → creates matrix showing prediction results  
+
+Matrix format:
+[[TN FP]  
+ [FN TP]]  
+
+Why used: To evaluate classification performance.
+
+13. EXTRACTING VALUES
+```python
+TN = cm[0][0]
+FP = cm[0][1]
+FN = cm[1][0]
+TP = cm[1][1]
+```
+Extracts values from confusion matrix  
+
+Why used: Required to calculate performance metrics.
+
+14. PERFORMANCE METRICS
+```python
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+error_rate = (FP + FN) / (TP + TN + FP + FN)
+precision = TP / (TP + FP)
+recall = TP / (TP + FN)
+```
+Accuracy → proportion of correct predictions  
+Error Rate → proportion of incorrect predictions  
+Precision → accuracy of positive predictions  
+Recall → ability to detect positive cases  
+
+Why used: To measure model performance in detail.
+
+15. DISPLAYING RESULTS
+```python
+print(accuracy)
+print(error_rate)
+print(precision)
+print(recall)
+```
+Displays calculated metrics  
+
+Why used: To interpret model effectiveness.
+
+## FUNCTIONS USED AND PURPOSE
+read_csv() → load dataset  
+head() → display rows  
+columns → show column names  
+isnull() → check missing values  
+map() → convert categorical data  
+train_test_split() → split dataset  
+StandardScaler() → scale features  
+fit() → train model  
+predict() → make predictions  
+confusion_matrix() → evaluate classification  
+accuracy, precision, recall → performance metrics  
+
+## CONCLUSION
+In this assignment, Logistic Regression is used to classify whether a user will purchase a product based on age and salary. The dataset is preprocessed by handling missing values and converting categorical data into numerical form. The data is split into training and testing sets, and features are scaled for better performance. The model is trained and predictions are made. The confusion matrix is used to evaluate the model, and performance metrics such as accuracy, error rate, precision, and recall are calculated. The model successfully performs classification and provides insights into prediction accuracy.

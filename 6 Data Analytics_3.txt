@@ -1,0 +1,388 @@
+# -------------------------------------------------
+# Assignment 6: Naïve Bayes Classification (Iris)
+# -------------------------------------------------
+
+# Step 1: Import required libraries
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix
+
+# -------------------------------------------------
+# Step 2: Load Dataset
+# -------------------------------------------------
+
+# Method 1: Load dataset from local CSV file (USED)
+df = pd.read_csv("Iris.csv")
+
+# Method 2: Load dataset from URL (ALTERNATIVE)
+# url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+# col_names = ['SepalLength','SepalWidth','PetalLength','PetalWidth','Species']
+# df = pd.read_csv(url, names=col_names)
+
+print("First 5 rows:")
+print(df.head())
+
+print("\nColumn names:")
+print(df.columns)
+
+# -------------------------------------------------
+# Step 3: Check Missing Values
+# -------------------------------------------------
+
+print("\nMissing values:")
+print(df.isnull().sum())
+
+# -------------------------------------------------
+# Step 4: Convert Categorical to Numerical
+# -------------------------------------------------
+
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+df['Species'] = le.fit_transform(df['Species'])
+
+print("\nAfter encoding:")
+print(df.head())
+
+# -------------------------------------------------
+# Step 5: Select Features and Target
+# -------------------------------------------------
+
+X = df.drop('Species', axis=1)
+y = df['Species']
+
+# -------------------------------------------------
+# Step 6: Split Dataset
+# -------------------------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=0
+)
+
+print("\nTraining data size:", X_train.shape)
+print("Testing data size:", X_test.shape)
+
+# -------------------------------------------------
+# Step 7: Create Naïve Bayes Model
+# -------------------------------------------------
+
+model = GaussianNB()
+
+# Train model
+model.fit(X_train, y_train)
+
+# -------------------------------------------------
+# Step 8: Make Predictions
+# -------------------------------------------------
+
+y_pred = model.predict(X_test)
+
+print("\nPredicted values:")
+print(y_pred)
+
+# -------------------------------------------------
+# Step 9: Confusion Matrix (Multi-class)
+# -------------------------------------------------
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("\nConfusion Matrix (Multi-class):")
+print(cm)
+
+# -------------------------------------------------
+# Step 10: Convert Multi-class to Binary (One-vs-Rest)
+# -------------------------------------------------
+
+# Considering class '0' (Setosa) as Positive class
+
+y_test_binary = [1 if i == 0 else 0 for i in y_test]
+y_pred_binary = [1 if i == 0 else 0 for i in y_pred]
+
+# -------------------------------------------------
+# Step 11: Binary Confusion Matrix
+# -------------------------------------------------
+
+cm_binary = confusion_matrix(y_test_binary, y_pred_binary)
+
+print("\nBinary Confusion Matrix:")
+print(cm_binary)
+
+# Extract values
+TN = cm_binary[0][0]
+FP = cm_binary[0][1]
+FN = cm_binary[1][0]
+TP = cm_binary[1][1]
+
+print("\nTN:", TN)
+print("FP:", FP)
+print("FN:", FN)
+print("TP:", TP)
+
+# -------------------------------------------------
+# Step 12: Performance Metrics
+# -------------------------------------------------
+
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+error_rate = (FP + FN) / (TP + TN + FP + FN)
+precision = TP / (TP + FP)
+recall = TP / (TP + FN)
+
+print("\nAccuracy:", accuracy)
+print("Error Rate:", error_rate)
+print("Precision:", precision)
+print("Recall:", recall)
+
+////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# EXPERIMENT 6 – NAÏVE BAYES CLASSIFICATION (IRIS DATASET)
+
+## AIM
+To implement the Naïve Bayes classification algorithm on the Iris dataset and evaluate the model using confusion matrix, TP, FP, TN, FN, Accuracy, Error Rate, Precision, and Recall.
+
+## CODE EXPLANATION (LINE BY LINE)
+
+1. IMPORTING LIBRARIES
+```python
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix
+```
+import → used to include external libraries  
+pandas → used for handling dataset in tabular format  
+numpy → used for numerical operations  
+train_test_split → splits dataset into training and testing sets  
+GaussianNB → Naïve Bayes classifier based on Gaussian distribution  
+confusion_matrix → used to evaluate classification results  
+
+Why used: These libraries are required for preprocessing, model building, and evaluation.
+
+2. LOADING DATASET
+```python
+df = pd.read_csv("Iris.csv")
+```
+pd.read_csv() → reads CSV file and converts it into DataFrame  
+df → stores dataset  
+
+Alternative Method:
+Dataset can be loaded using URL.
+
+Why used: To import dataset into memory.
+
+3. DISPLAYING DATA
+```python
+print(df.head())
+print(df.columns)
+```
+head() → displays first 5 rows  
+columns → shows column names  
+
+Why used: To understand dataset structure and verify column names.
+
+4. CHECKING MISSING VALUES
+```python
+df.isnull().sum()
+```
+isnull() → checks for missing values  
+sum() → counts missing values column-wise  
+
+Why used: Ensures dataset is complete before training.
+
+5. CONVERTING CATEGORICAL DATA
+```python
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+df['Species'] = le.fit_transform(df['Species'])
+```
+LabelEncoder → converts categorical values into numerical form  
+fit_transform() → assigns numbers to categories  
+
+Example:
+Setosa → 0  
+Versicolor → 1  
+Virginica → 2  
+
+Why used: Machine learning models require numerical data.
+
+6. SELECTING FEATURES AND TARGET
+```python
+X = df.drop('Species', axis=1)
+y = df['Species']
+```
+drop() → removes target column  
+X → independent variables (features)  
+y → dependent variable (target)  
+
+Why used: Model uses features to predict species.
+
+7. SPLITTING DATASET
+```python
+train_test_split(X, y, test_size=0.2, random_state=0)
+```
+test_size=0.2 → 20% data used for testing  
+random_state=0 → ensures reproducibility  
+
+Why used: To evaluate model on unseen data.
+
+8. CREATING MODEL
+```python
+model = GaussianNB()
+```
+GaussianNB() → Naïve Bayes classifier  
+
+Why used: Uses probability and Bayes theorem for classification.
+
+9. TRAINING MODEL
+```python
+model.fit(X_train, y_train)
+```
+fit() → trains model using training data  
+
+Why used: Model learns probability distribution of features.
+
+10. MAKING PREDICTIONS
+```python
+y_pred = model.predict(X_test)
+```
+predict() → predicts class labels  
+
+Why used: To evaluate model performance.
+
+11. CONFUSION MATRIX (MULTI-CLASS)
+```python
+cm = confusion_matrix(y_test, y_pred)
+```
+confusion_matrix() → shows comparison of actual vs predicted values  
+
+Why used: To evaluate classification performance across all classes.
+
+12. CONVERTING MULTI-CLASS TO BINARY (ONE-VS-REST)
+```python
+y_test_binary = [1 if i == 0 else 0 for i in y_test]
+y_pred_binary = [1 if i == 0 else 0 for i in y_pred]
+```
+Logic:
+- Class 0 (Setosa) → Positive (1)  
+- Other classes → Negative (0)  
+
+Why used: TP, FP, TN, FN are defined only for binary classification, so we convert multi-class into binary.
+
+13. BINARY CONFUSION MATRIX
+```python
+cm_binary = confusion_matrix(y_test_binary, y_pred_binary)
+```
+Structure:
+[[TN FP]  
+ [FN TP]]  
+
+Why used: To extract TP, FP, TN, FN.
+
+14. EXTRACTING VALUES
+```python
+TN = cm_binary[0][0]
+FP = cm_binary[0][1]
+FN = cm_binary[1][0]
+TP = cm_binary[1][1]
+```
+TN → correctly predicted negative  
+FP → wrongly predicted positive  
+FN → wrongly predicted negative  
+TP → correctly predicted positive  
+
+Why used: Required for calculating performance metrics.
+
+15. PERFORMANCE METRICS
+```python
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+error_rate = (FP + FN) / (TP + TN + FP + FN)
+precision = TP / (TP + FP)
+recall = TP / (TP + FN)
+```
+Accuracy → proportion of correct predictions  
+Error Rate → proportion of incorrect predictions  
+Precision → correctness of positive predictions  
+Recall → ability to identify actual positives  
+
+Why used: To evaluate model performance in detail.
+
+16. DISPLAYING RESULTS
+```python
+print(accuracy)
+print(error_rate)
+print(precision)
+print(recall)
+```
+Displays computed metrics  
+
+Why used: To interpret model effectiveness.
+
+## FUNCTIONS USED AND PURPOSE
+read_csv() → load dataset  
+head() → display rows  
+columns → show column names  
+isnull() → check missing values  
+LabelEncoder() → convert categorical data  
+drop() → remove column  
+train_test_split() → split dataset  
+GaussianNB() → create model  
+fit() → train model  
+predict() → make predictions  
+confusion_matrix() → evaluate results  
+
+## CONCLUSION
+In this assignment, the Naïve Bayes algorithm is implemented on the Iris dataset for classification. The dataset is preprocessed by checking for missing values and converting categorical data into numerical form using label encoding. The dataset is split into training and testing sets, and the Gaussian Naïve Bayes model is trained. Predictions are made on the test data, and performance is evaluated using a confusion matrix. Since the dataset is multi-class, it is converted into a binary classification problem using the one-vs-rest approach to compute TP, FP, TN, and FN. Based on these values, accuracy, error rate, precision, and recall are calculated. The model performs effectively and demonstrates accurate classification.
